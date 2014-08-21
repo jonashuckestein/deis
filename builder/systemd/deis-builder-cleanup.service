@@ -1,0 +1,8 @@
+[Unit]
+Description=Periodic cleanup of orphaned Docker images
+
+[Service]
+ExecStart=/bin/sh -c 'pid=$(docker inspect --format "{{.State.Pid}}" deis-builder) nsenter --target $pid --mount --uts --ipc --net --pid -- env --ignore-environment /app/bin/cleanup'
+
+[X-Fleet]
+X-ConditionMachineOf=deis-builder.service
